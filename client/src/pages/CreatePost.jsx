@@ -1,4 +1,3 @@
-
 const CreatePost = () => {
   return (
     <div>

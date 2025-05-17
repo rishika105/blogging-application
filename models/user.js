@@ -51,8 +51,8 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-userSchema.static('matchPassword', function(email, password){
-    const user = this.findOne({email});
+userSchema.static('matchPassword',async function(email, password){
+    const user = await this.findOne({email});
 
     if(!user) throw new Error("User not found!")
 
@@ -68,6 +68,8 @@ userSchema.static('matchPassword', function(email, password){
     // return hashedPassword == userProvidedHash;
     
     return {...user, password: undefined, salt: undefined}
+    //remove sensitive info
+
 })
 
 module.exports = mongoose.model("User", userSchema);

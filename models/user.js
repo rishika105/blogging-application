@@ -1,6 +1,7 @@
 const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
 const { createHmac, randomBytes } = require("crypto");
+const { generateToken } = require("../utils/authentication");
 //built in ^
 
 const userSchema = new Schema(
@@ -40,7 +41,7 @@ userSchema.pre("save", function (next) {
   const user = this; //points to the user
 
   if (!user.isModified("password")) return; //password not modified
-  const salt = randomBytes(16).toString();
+  const salt = randomBytes(16).toString("hex");
   const hashedPassword = createHmac("sha256", salt)
     .update(user.password)
     .digest("hex");
@@ -48,10 +49,10 @@ userSchema.pre("save", function (next) {
   this.salt = salt;
   this.password = hashedPassword;
 
-  next();
+ return next(); //return beacuse if not modified the next func wont call
 });
 
-userSchema.static('matchPassword',async function(email, password){
+userSchema.static('matchPasswordAndToken',async function(email, password){
     const user = await this.findOne({email});
 
     if(!user) throw new Error("User not found!")
@@ -60,15 +61,17 @@ userSchema.static('matchPassword',async function(email, password){
     const hashedPassword = user.password;
 
     const userProvidedHash = createHmac("sha256", salt)
-    .update(password)
+    .update(password) 
     .digest("hex")
 
     if(hashedPassword !== userProvidedHash) throw new Error("Incorrect Password")
 
     // return hashedPassword == userProvidedHash;
     
-    return {...user, password: undefined, salt: undefined}
-    //remove sensitive info
+    // return {...user, password: undefined, salt: undefined}
+    // //remove sensitive info
+    const token = generateToken(user);
+    return token;
 
 })
 

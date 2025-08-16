@@ -1,19 +1,96 @@
-<%-include("./partials/header")-%>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Login</title>
-  </head>
-  <body>
-    <form method="POST" action="/login">
-      <p>Enter your email</p>
-      <br />
-      <input type="text" name="email" placeholder="enter your email" />
-      <p>Enter your password</p>
-      <br />
-      <input type="text" name="password" placeholder="enter your password" />
-      <button type="submit">Sign Up</button>
-    </form>
-  </body>
+<%- include('./partials/header', { title: 'Login - Modern Blog' }) %>
+
+<body class="bg-background min-h-screen">
+  <%- include('./partials/nav') %>
+  
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-foreground">
+          Welcome Back
+        </h2>
+        <p class="mt-2 text-muted-foreground">
+          Sign in to your account to continue
+        </p>
+      </div>
+
+      <!-- Error Display -->
+      <% if (locals.error) { %>
+        <div class="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <%= locals.error %>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="bg-card border border-border rounded-lg shadow-sm p-8">
+        <form method="POST" action="/login" class="space-y-6">
+          <div>
+            <label for="email" class="block text-sm font-medium text-foreground mb-2">
+              Email Address
+            </label>
+            <input 
+              id="email"
+              name="email" 
+              type="email" 
+              required 
+              class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+              placeholder="Enter your email"
+            >
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-foreground mb-2">
+              Password
+            </label>
+            <input 
+              id="password"
+              name="password" 
+              type="password" 
+              required 
+              class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+              placeholder="Enter your password"
+            >
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input 
+                id="remember-me" 
+                name="remember-me" 
+                type="checkbox" 
+                class="h-4 w-4 text-accent focus:ring-ring border-border rounded"
+              >
+              <label for="remember-me" class="ml-2 block text-sm text-muted-foreground">
+                Remember me
+              </label>
+            </div>
+            <a href="/forgot-password" class="text-sm text-accent hover:text-accent/80 transition-colors">
+              Forgot password?
+            </a>
+          </div>
+
+          <button 
+            type="submit" 
+            class="w-full bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground py-3 px-4 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-muted-foreground">
+            Don't have an account? 
+            <a href="/signup" class="text-accent hover:text-accent/80 font-medium transition-colors">
+              Sign up here
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 </html>

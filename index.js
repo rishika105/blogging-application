@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 app.use(checkForAuthCookie("token"))
-// app.use(express.static(path.resolve("./uploads")))
 
 
 database.connect();
@@ -25,6 +24,7 @@ database.connect();
 //serve static files
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+app.use("/uploads", express.static("uploads"))
 
 // routers
 app.get("/", (req, res) => {

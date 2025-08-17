@@ -60,7 +60,7 @@ exports.handleLogin = async (req, res) => {
       httpOnly: true, // Security: prevent XSS attacks
       secure: process.env.NODE_ENV === 'production', // HTTPS in production
       sameSite: 'strict' // CSRF protection
-    }).redirect("/blog/add-new");
+    }).redirect("/blog/allBlogs");
     
   } catch (error) {
     console.log(error.message);

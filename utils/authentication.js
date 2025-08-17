@@ -17,7 +17,8 @@ function generateToken(user) {
 }
 
 function verifyToken(token) {
-  const payload = jwt.verify(token, secret);
+  if (!token) throw new Error("No token provided");
+  const payload = jwt.verify(token, process.env.JWT_SECRET);
   return payload;
 }
 

@@ -2,11 +2,12 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 4000;
 const userRoutes = require("./routes/user");
+const blogRoutes = require("./routes/blog")
 const mongoose = require("mongoose")
 const database = require("./config/database")
 const dotenv = require("dotenv");
 const cookieParser = require('cookie-parser');
-const { checkForAuthCookie } = require("./middlewares/auth");
+const { checkForAuthCookie, requireAuth } = require("./middlewares/auth");
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 app.use(checkForAuthCookie("token"))
+// app.use(express.static(path.resolve("./uploads")))
+
 
 database.connect();
 
@@ -31,6 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", userRoutes);
+app.use("/blog", requireAuth, blogRoutes)
 
 // server listening
 app.listen(PORT, () => {

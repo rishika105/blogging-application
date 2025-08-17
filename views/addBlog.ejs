@@ -1,0 +1,105 @@
+<%- include('./partials/header', { title: 'Add New Blog' }) %>
+<body class="bg-background min-h-screen">
+  <%- include('./partials/nav') %>
+  
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-foreground mb-4">Create New Blog Post</h1>
+      <p class="text-muted-foreground text-lg">Share your thoughts with the world</p>
+    </div>
+
+    <!-- Error Display -->
+    <% if (locals.error) { %>
+      <div class="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg mb-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+          <%= locals.error %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Success Message -->
+    <% if (locals.message) { %>
+      <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <%= locals.message %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Blog Form -->
+    <div class="bg-card rounded-xl shadow-sm border border-border p-8">
+      <form method="POST" action="/blog/addBlog" enctype="multipart/form-data" class="space-y-6">
+        <!-- Title Field -->
+        <div class="space-y-2">
+          <label for="title" class="block text-sm font-medium text-foreground">
+            Blog Title
+          </label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            required
+            placeholder="Enter an engaging title for your blog post"
+            class="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        <!-- Body Field -->
+        <div class="space-y-2">
+          <label for="body" class="block text-sm font-medium text-foreground">
+            Blog Content
+          </label>
+          <textarea
+            id="body"
+            name="body"
+            required
+            rows="12"
+            placeholder="Write your blog content here... Share your thoughts, experiences, and insights."
+            class="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-vertical"
+          ></textarea>
+        </div>
+
+        <!-- Cover Image Field -->
+        <div class="space-y-2">
+          <label for="coverImage" class="block text-sm font-medium text-foreground">
+            Cover Image (Optional)
+          </label>
+          <div class="relative">
+            <input
+              id="coverImage"
+              name="coverImage"
+              type="file"
+              accept="image/*"
+              class="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer cursor-pointer transition-all duration-200"
+            />
+          </div>
+          <p class="text-sm text-muted-foreground">Upload a cover image to make your blog post more engaging</p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex gap-4 pt-4">
+          <button
+            type="submit"
+            class="flex-1 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02]"
+          >
+            Publish Blog Post
+          </button>
+          <a
+            href="/blog/all"
+            class="px-6 py-3 rounded-lg font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200"
+          >
+            View All Blogs
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

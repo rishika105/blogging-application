@@ -1,10 +1,8 @@
-const { Schema } = require("mongoose");
 const mongoose = require("mongoose");
 const { createHmac, randomBytes } = require("crypto");
 const { generateToken } = require("../utils/authentication");
-//built in ^
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,

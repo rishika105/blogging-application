@@ -17,7 +17,7 @@ exports.handleAddBlog = async (req, res) => {
     await Blog.create({
       title,
       body,
-      coverImageURL:coverImage,
+      coverImageURL: coverImage,
       createdBy: id, // assuming you want to link blog with user
     });
 
@@ -28,3 +28,27 @@ exports.handleAddBlog = async (req, res) => {
   }
 };
 
+exports.getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog
+      .find({})
+      .populate("createdBy", "fullName")
+      .sort({ createdAt: -1 });
+      // console.log(blogs);
+     return res.render("allBlogs", { blogs, user: req.user }); // In Express, res.render(view, locals) only takes two arguments:
+  } catch (error) {
+    console.log(error);
+    return res.render("allBlogs", { error: "Failed to fetch blogs" });
+  }
+};
+
+exports.getBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id).populate("createdBy", "fullName");
+    return res.render("blog", { blog, user: req.user });
+  } 
+  catch (error) {
+    console.log(error);
+    return res.render("blog", { error: "Cannot get this blog" });
+  }
+};

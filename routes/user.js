@@ -19,7 +19,6 @@ router.get("/login", preventCache, (req, res) => {
   if (req.user) {
     return res.redirect("/blog/add-new") // or wherever you want logged-in users to go
   }
-
   res.render("login")
 })
 
@@ -28,7 +27,6 @@ router.get("/signup", preventCache, (req, res) => {
   if (req.user) {
     return res.redirect("/blog/add-new")
   }
-
   res.render("signup")
 })
 

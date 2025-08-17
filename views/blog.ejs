@@ -1,0 +1,36 @@
+<%- include('./partials/header', { title: blog ? blog.title : "Blog" }) %>
+
+<body class="bg-background min-h-screen">
+  <%- include('./partials/nav', { user }) %>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <% if (locals.error) { %>
+      <div class="bg-red-100 text-red-700 p-4 rounded-lg">
+        <%= locals.error %>
+      </div>
+    <% } else if (blog) { %>
+      <article class="bg-white rounded-xl shadow p-6">
+        <h1 class="text-3xl font-bold mb-4"><%= blog.title %></h1>
+        
+        <% if (blog.coverImageURL) { %>
+          <img 
+            src="/uploads/<%= blog.coverImageURL %>" 
+            alt="cover" 
+            class="w-full h-64 object-cover rounded-lg mb-6"
+          />
+        <% } %>
+        
+        <p class="text-gray-700 leading-relaxed mb-6">
+          <%= blog.body %>
+        </p>
+
+        <p class="text-sm text-gray-500">
+          Posted by <%= blog.createdBy?.fullName || "Anonymous" %>
+          on <%= blog.createdAt.toDateString() %>
+        </p>
+      </article>
+    <% } else { %>
+      <p class="text-gray-600">Blog not found.</p>
+    <% } %>
+  </main>
+</body>

@@ -40,7 +40,7 @@ function requireAuth(req, res, next) {
 // Middleware to prevent authenticated users from accessing login/signup
 function redirectIfAuthenticated(req, res, next) {
   if (req.user) {
-    return res.redirect("/blog/allBlogs"); // or your dashboard route
+    return res.redirect("/blog/all"); // or your dashboard route
   }
   next();
 }

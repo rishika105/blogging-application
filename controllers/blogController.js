@@ -30,12 +30,11 @@ exports.handleAddBlog = async (req, res) => {
 
 exports.getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog
-      .find({})
+    const blogs = await Blog.find({})
       .populate("createdBy", "fullName")
       .sort({ createdAt: -1 });
-      // console.log(blogs);
-     return res.render("allBlogs", { blogs, user: req.user }); // In Express, res.render(view, locals) only takes two arguments:
+    // console.log(blogs);
+    return res.render("allBlogs", { blogs, user: req.user }); // In Express, res.render(view, locals) only takes two arguments:
   } catch (error) {
     console.log(error);
     return res.render("allBlogs", { error: "Failed to fetch blogs" });
@@ -44,11 +43,41 @@ exports.getAllBlogs = async (req, res) => {
 
 exports.getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate("createdBy", "fullName");
-    return res.render("blog", { blog, user: req.user });
-  } 
-  catch (error) {
+    const blog = await Blog.findById(req.params.id)
+      .populate("createdBy", "fullName")
+      .populate({
+        path: "likes",
+        populate: {
+          path: "user",
+          select: "fullName"
+        }
+      })
+      // .populate({
+      //   path: "comments",
+      //   populate: {
+      //     path: "user",
+      //     select: "fullName"
+      //   }
+      // });
+
+    // Check if current user has liked this blog
+    const likedByUser = blog.likes.some(
+      (like) => like.user && like.user._id.toString() === req.user._id.toString()
+    );
+
+    // console.log("likedByUser:", likedByUser);
+     if (!blog) {
+      return res.render("blogDetails", { 
+        error: "Blog not found", 
+        blog: null, 
+        user: req.user, 
+        likedByUser: false 
+      });
+    }
+
+    return res.render("blogDetails", { blog, user: req.user, likedByUser });
+  } catch (error) {
     console.log(error);
-    return res.render("blog", { error: "Cannot get this blog" });
+    return res.render("blogDetails", { error: "Cannot get this blog" });
   }
 };

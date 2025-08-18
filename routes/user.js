@@ -34,6 +34,14 @@ router.get("/logout", preventCache, (req, res) => {
   res.clearCookie("token").redirect("/login")
 })
 
+router.get("/about", (req, res) => {
+return  res.render("about", {user: req.user})
+})
+
+router.get("/contact", (req, res) => {
+  return res.render("contact", {user: req.user})
+})
+
 router.post("/signup", preventCache, handleRegisterUser)
 router.post("/login", preventCache, handleLogin)
 

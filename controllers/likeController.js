@@ -1,42 +1,45 @@
 const Like = require("../models/like");
 const Blog = require("../models/blog");
-const { post } = require("../routes/blog");
 
-exports.createLike = async (req, res) => {
+exports.toggleLike = async (req, res) => {
   try {
-    const { blog, user } = req.body;
+    const { blogId } = req.body; // blogId should come from hidden input or AJAX
+    const userId = req.user._id; // assuming user is logged in
+    const existingLike = await Like.findOne({ blog: blogId, user: userId });
 
-    const like = await Like.Create({
-      blog,
-      user,
-    });
+    let updatedPost;
+    let liked = false;
 
-    const updatedPost = await Blog.findByIdAndUpdate(
-      post,
-      { $push: { likes: like._id } },
-      { new: true }
-    )
-      .populate("likes")
-      .exec();
+    if (existingLike) {
+      //unlike
+      await Like.findByIdAndDelete(existingLike._id);
 
-      return res.status(200).json({success: true, message:"liked success"})
+      updatedPost = await Blog.findByIdAndUpdate(
+        blogId,
+        { $pull: { likes: existingLike._id } },
+        { new: true }
+      );
+
+    } else {
+      //like
+      const newLike = await Like.create({ user: userId, blog: blogId });
+
+      updatedPost = await Blog.findByIdAndUpdate(
+        blogId,
+        { $push: { likes: newLike._id } },
+        { new: true }
+      );
+      liked = true;
+    }
+    
+      return res.json({
+        success: true,
+        liked: liked,
+        likesCount: updatedPost.likes.length,
+      });
+
   } catch (error) {
-    console.log(error);
+     console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
-exports.createUnlike = async(req, res) => {
-    try{
-        const {post, like} = req.body;
-
-        await Like.findByIdAndDelete(like._id)
-
-        const updatedPost = await Blog.findByIdAndUpdate(post, {$pull: {likes: like._id}}, {new: true} )
-
-        return res.status(200).json({success: true, message: "Unlike success"})
-    }
-    catch(error){
-        console.log(error)
-    }
-}
- 

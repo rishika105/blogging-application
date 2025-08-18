@@ -1,0 +1,120 @@
+<%- include('./partials/header') %>
+<body class="bg-background text-foreground min-h-screen">
+  <%- include('./partials/nav') %>
+  
+  <main class="container mx-auto px-4 py-14 max-w-6xl">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-semibold text-foreground mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text">
+        About Our Blog App
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+        Discover stories, insights, and perspectives that inspire and inform. We're passionate about creating content that matters.
+      </p>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+      <div>
+        <h2 class="text-3xl font-bold text-foreground mb-6">Our Mission</h2>
+        <p class="text-muted-foreground leading-relaxed mb-6">
+          We believe in the power of storytelling to connect people, share knowledge, and inspire change. Our platform serves as a bridge between writers and readers, fostering meaningful conversations and building communities around shared interests.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          Every article we publish is crafted with care, researched thoroughly, and designed to provide value to our readers. We're committed to maintaining the highest standards of quality and authenticity in everything we share.
+        </p>
+      </div>
+      <div class="bg-card rounded-xl p-8 border border-border">
+        <div class="space-y-6">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-foreground">Quality Content</h3>
+              <p class="text-sm text-muted-foreground">Thoroughly researched and expertly written</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-secondary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-foreground">Community Focus</h3>
+              <p class="text-sm text-muted-foreground">Building connections through shared stories</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-accent-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-foreground">Innovation</h3>
+              <p class="text-sm text-muted-foreground">Embracing new ideas and perspectives</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="mb-20">
+      <h2 class="text-3xl font-bold text-center text-foreground mb-12">Meet Our Team</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-full mx-auto mb-4 flex items-center justify-center">
+            <span class="text-2xl font-extrabold opacity-60 text-gray-500">SJ</span>
+          </div>
+          <h3 class="text-xl font-semibold text-foreground mb-2">Sarah Johnson</h3>
+          <p class="text-muted-foreground mb-4">Editor-in-Chief</p>
+          <p class="text-sm text-muted-foreground">Passionate about storytelling and community building with over 10 years of editorial experience.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-32 h-32 bg-gradient-to-br from-secondary to-accent rounded-full mx-auto mb-4 flex items-center justify-center">
+            <span class="text-2xl font-extrabold opacity-60 text-gray-500">MC</span>
+          </div>
+          <h3 class="text-xl font-semibold text-foreground mb-2">Michael Chen</h3>
+          <p class="text-muted-foreground mb-4">Lead Writer</p>
+          <p class="text-sm text-muted-foreground">Technology enthusiast and creative writer who brings complex topics to life through engaging narratives.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-32 h-32 bg-gradient-to-br from-accent to-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+            <span class="text-2xl font-extrabold opacity-60 text-gray-500">ER</span>
+          </div>
+          <h3 class="text-xl font-semibold text-foreground mb-2">Emily Rodriguez</h3>
+          <p class="text-muted-foreground mb-4">Community Manager</p>
+          <p class="text-sm text-muted-foreground">Dedicated to fostering meaningful connections and ensuring every voice in our community is heard.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-card rounded-2xl p-12 text-center border border-border">
+      <h2 class="text-3xl font-bold text-foreground mb-4">Join Our Journey</h2>
+      <p class="text-muted-foreground mb-8 max-w-2xl mx-auto">
+        Be part of our growing community of readers and writers. Subscribe to our newsletter for the latest updates and exclusive content.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/signup" class="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+          Start Writing
+        </a>
+        <a href="/contact" class="bg-secondary text-secondary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-secondary/90 transition-colors">
+          Get in Touch
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+<div class="mt-10">
+       <%- include ("./partials/footer")%>
+</div>
+
+</body>
+</html>

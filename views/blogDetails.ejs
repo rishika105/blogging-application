@@ -1,0 +1,248 @@
+<%- include('./partials/header') %>
+<body class="bg-background text-foreground min-h-screen">
+  <%- include('./partials/nav') %>
+
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Blog Post -->
+    <article
+      class="bg-card rounded-2xl border border-border overflow-hidden mb-12"
+    >
+      <!-- Cover Image -->
+      <% if (blog?.coverImageURL) { %>
+      <div class="aspect-video bg-muted">
+        <img
+          src="/uploads/<%= blog?.coverImageURL %>"
+          alt="<%= blog.title %>"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <% } %>
+
+      <!-- Content -->
+      <div class="p-8">
+        <!-- Meta Info -->
+        <div
+          class="flex items-center space-x-4 text-sm text-muted-foreground mb-6"
+        >
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center"
+            >
+              <span class="text-xs font-bold text-white"
+                ><%= blog.createdBy.fullName %></span
+              >
+            </div>
+            <span>Author: <%= blog.createdBy.fullName %></span>
+          </div>
+          <span>•</span>
+          <time
+            ><%= new Date(blog.createdAt).toLocaleDateString('en-US', { year:
+            'numeric', month: 'long', day: 'numeric' }) %></time
+          >
+          <span>•</span>
+          <span
+            ><%= Math.ceil(blog.body.split(' ').length / 200) %> min read</span
+          >
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-4xl font-bold text-foreground mb-6 leading-tight">
+          <%= blog.title %>
+        </h1>
+
+        <!-- Content -->
+        <div class="prose prose-lg max-w-none text-foreground">
+          <p class="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            <%= blog.body %>
+          </p>
+        </div>
+
+        <!-- Engagement Section -->
+        <div
+          class="flex items-center justify-between pt-8 mt-8 border-t border-border"
+        >
+          <div class="flex items-center space-x-6">
+            <!-- Like Button -->
+            <form
+              id="likeForm"
+              data-blog-id="<%= blog._id %>"
+              class="flex items-center space-x-2 cursor-pointer"
+            >
+              <!-- //already if liked by the user should show this -->
+              <svg
+                id="likeIcon"
+                class="w-6 h-6 transition-transform <%= likedByUser ? 'text-red-500' : 'text-gray-500' %>"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 
+             3.99 4 6.5 4c1.74 0 3.41 1.01 4.22 2.53C11.09 5.01 
+             12.76 4 14.5 4 17.01 4 19 6 19 8.5c0 3.78-3.4 
+             6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+              <span id="likeCount"
+                ><%= blog.likes ? blog.likes.length : 0 %></span
+              >
+            </form>
+
+            <!-- Comment Count -->
+            <div class="flex items-center space-x-2 text-muted-foreground">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                ></path>
+              </svg>
+              <span><%= blog.comments ? blog.comments.length : 0 %></span>
+            </div>
+          </div>
+
+          <!-- Share Button -->
+          <button
+            class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/90 transition-colors"
+          >
+            Share
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="bg-card rounded-2xl border border-border p-8">
+      <h2 class="text-2xl font-bold text-foreground mb-8">
+        Comments (<span id="commentCount"
+          ><%= blog.comments ? blog.comments.length : 0 %></span
+        >)
+      </h2>
+
+      <!-- Add Comment Form -->
+      <form
+        id="commentForm"
+        class="mb-8"
+        data-blog-id="<%= blog._id %>"
+        method="POST"
+        action="/blog/comment"
+      >
+        <div class="flex space-x-4">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            <span class="text-sm font-bold text-white"
+              ><%= user.fullName %></span
+            >
+          </div>
+          <div class="flex-1">
+            <textarea
+              id="body"
+              name="body"
+              placeholder="Add a comment..."
+              rows="3"
+              class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors resize-none"
+              required
+            ></textarea>
+            <div class="flex justify-end mt-3">
+              <button
+                type="submit"
+                class="px-6 py-3 rounded-lg font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200"
+              >
+                Post Comment
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Comments List -->
+      <div id="commentsList" class="space-y-6">
+        <% if (blog.comments && blog.comments.length > 0) { %> <%
+        blog.comments.forEach(comment => { %>
+        <div class="flex space-x-4 p-4 bg-muted rounded-lg">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            <span class="text-sm font-bold text-white"
+              ><%= comment.user.fullName.charAt(0) %></span
+            >
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center space-x-2 mb-2">
+              <h4 class="font-semibold text-foreground">
+                <%= comment.user.fullName %>
+              </h4>
+              <span class="text-sm text-muted-foreground">
+                <%= new Date(comment.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric' }) %>
+              </span>
+            </div>
+            <p class="text-foreground leading-relaxed"><%= comment.body %></p>
+          </div>
+        </div>
+        <% }) %> <% } else { %>
+        <div class="text-center py-8">
+          <p class="text-muted-foreground">
+            No comments yet. Be the first to share your thoughts!
+          </p>
+        </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-card border-t border-border mt-20">
+    <div class="container mx-auto px-4 py-12">
+      <div class="text-center">
+        <p class="text-muted-foreground">
+          &copy; 2024 Our Blog. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelector('#likeForm').addEventListener('click', async e => {
+      e.preventDefault()
+
+      const blogId = e.currentTarget.dataset.blogId
+
+      const res = await fetch('/blog/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blogId })
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        // update count
+        document.querySelector('#likeCount').innerText = data.likesCount
+        // toggle heart color
+        const icon = document.querySelector('#likeIcon')
+        if (data.liked) {
+          icon.classList.remove('text-gray-500')
+          icon.classList.add('text-red-500')
+        } else {
+          icon.classList.remove('text-red-500')
+          icon.classList.add('text-gray-500')
+        }
+      }
+    })
+
+    document
+      .querySelector('#commentForm')
+      .addEventListener('click', async e => {
+        e.preventDefault()
+
+        const blogId = e.currentTarget.dataset.blogId
+      })
+  </script>
+</body>

@@ -1,14 +1,14 @@
 # 📝 Blogging Application
 
 A full-stack **blogging platform** built using **Node.js, Express, MongoDB, EJS, and TailwindCSS**.  
-It allows users to register, log in, create blogs with images, like/unlike posts in real-time (AJAX), and comment on them.  
+It allows users to register, log in, create blogs with images, like/unlike posts, and comment on them.  
 
 ---
 
 ## 🚀 Features
 - 🔐 User Authentication (Signup, Login, Logout) with JWT & Cookies  
 - ✍️ Create and publish blogs with images (Multer for uploads)  
-- ❤️ Like & Unlike blogs without page reload (AJAX with Fetch API)  
+- ❤️ Like & Unlike blogs without page reload
 - 💬 Comment on blogs  
 - 🎨 Responsive UI built with **EJS + TailwindCSS**  
 - 🛡️ Cache prevention for secure login/logout  
@@ -22,7 +22,7 @@ It allows users to register, log in, create blogs with images, like/unlike posts
 - **Database**: MongoDB (Mongoose)  
 - **Authentication**: JWT + Cookies  
 - **File Uploads**: Multer  
-- **AJAX (without reload)**: Fetch API for like button  
+- **AJAX (without reload)**: Fetch API  
 
 
 ## ⚡ Installation & Setup

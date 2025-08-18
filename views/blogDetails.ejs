@@ -105,13 +105,6 @@
               <span><%= blog.comments ? blog.comments.length : 0 %></span>
             </div>
           </div>
-
-          <!-- Share Button -->
-          <button
-            class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/90 transition-colors"
-          >
-            Share
-          </button>
         </div>
       </div>
     </article>
@@ -125,13 +118,7 @@
       </h2>
 
       <!-- Add Comment Form -->
-      <form
-        id="commentForm"
-        class="mb-8"
-        data-blog-id="<%= blog._id %>"
-        method="POST"
-        action="/blog/comment"
-      >
+      <form id="commentForm" class="mb-8" data-blog-id="<%= blog._id %>">
         <div class="flex space-x-4">
           <div
             class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0"
@@ -151,10 +138,12 @@
             ></textarea>
             <div class="flex justify-end mt-3">
               <button
+                id="commentSubmitBtn"
                 type="submit"
                 class="px-6 py-3 rounded-lg font-medium border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200"
               >
-                Post Comment
+                <span class="btn-text">Post Comment</span>
+                <span class="btn-loading hidden">Posting...</span>
               </button>
             </div>
           </div>
@@ -169,9 +158,9 @@
           <div
             class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center flex-shrink-0"
           >
-            <span class="text-sm font-bold text-white"
-              ><%= comment.user.fullName.charAt(0) %></span
-            >
+            <span class="text-sm font-bold text-white">
+              <%= comment.user.fullName.charAt(0) %>
+            </span>
           </div>
           <div class="flex-1">
             <div class="flex items-center space-x-2 mb-2">
@@ -186,7 +175,7 @@
             <p class="text-foreground leading-relaxed"><%= comment.body %></p>
           </div>
         </div>
-        <% }) %> <% } else { %>
+        <% })} else { %>
         <div class="text-center py-8">
           <p class="text-muted-foreground">
             No comments yet. Be the first to share your thoughts!
@@ -209,6 +198,35 @@
   </footer>
 
   <script>
+    function createCommentElement(comment) {
+      return `
+        <div class="flex space-x-4 p-4 bg-muted rounded-lg">
+          <div
+            class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            <span class="text-sm font-bold text-white">
+              ${comment.user.fullName.charAt(0)}
+            </span>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center space-x-2 mb-2">
+              <h4 class="font-semibold text-foreground">${
+                comment.user.fullName
+              }</h4>
+              <span class="text-sm text-muted-foreground">
+                ${new Date(comment.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
+            <p class="text-foreground leading-relaxed">${comment.body}</p>
+          </div>
+        </div>
+      `
+    }
+
     document.querySelector('#likeForm').addEventListener('click', async e => {
       e.preventDefault()
 
@@ -239,10 +257,56 @@
 
     document
       .querySelector('#commentForm')
-      .addEventListener('click', async e => {
+      .addEventListener('submit', async e => {
         e.preventDefault()
 
         const blogId = e.currentTarget.dataset.blogId
+        const body = document.getElementById('body').value.trim()
+        const submitBtn = document.getElementById('commentSubmitBtn')
+        const btnText = submitBtn.querySelector('.btn-text')
+        const btnLoading = submitBtn.querySelector('.btn-loading')
+
+        if (!body) return
+
+        // Show loading
+        btnText.classList.add('hidden')
+        btnLoading.classList.remove('hidden')
+        submitBtn.disabled = true
+
+        try {
+          const response = await fetch(`/blog/comment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ body, blogId })
+          })
+
+          const data = await response.json()
+
+          if (data.success) {
+            document.getElementById('body').value = ''
+            document.getElementById('commentCount').textContent =
+              data.commentCount
+
+            // If there were no comments before, clear the "no comments" message
+            const commentsList = document.getElementById('commentsList')
+            if (commentsList.querySelector('.text-center')) {
+              commentsList.innerHTML = ''
+            }
+
+            // Append new comment
+            commentsList.insertAdjacentHTML(
+              'afterbegin',
+              createCommentElement(data.comment)
+            )
+          }
+        } catch (err) {
+          console.error(err)
+        } finally {
+          // Restore button
+          btnText.classList.remove('hidden')
+          btnLoading.classList.add('hidden')
+          submitBtn.disabled = false
+        }
       })
   </script>
 </body>

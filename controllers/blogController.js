@@ -52,13 +52,15 @@ exports.getBlogById = async (req, res) => {
           select: "fullName"
         }
       })
-      // .populate({
-      //   path: "comments",
-      //   populate: {
-      //     path: "user",
-      //     select: "fullName"
-      //   }
-      // });
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "fullName"
+        }
+      });  //for all already comments of this blog to render
+
+      // console.log(blog);
 
     // Check if current user has liked this blog
     const likedByUser = blog.likes.some(
